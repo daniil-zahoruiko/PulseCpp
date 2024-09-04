@@ -17,6 +17,10 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
+if(WIN32)
+    target_link_libraries(${PROJECT_NAME} ws2_32)
+endif()
+
 option(BUILD_EXAMPLES "Build examples" ON)
     
 if(BUILD_EXAMPLES)

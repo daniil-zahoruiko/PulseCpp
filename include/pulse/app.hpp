@@ -5,7 +5,7 @@ class App
 {
     public:
     
-    void start(int port);
+    void start(const char *port);
 };
 
 #endif
