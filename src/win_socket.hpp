@@ -14,6 +14,7 @@ class WinSocket : public IServerSocket
     private:
 
     WSAData wsa_data;
+    SOCKET sockfd;
 
     struct error_deleter
     {
@@ -34,6 +35,7 @@ class WinSocket : public IServerSocket
         {
             error.release();
         }
+        error = nullptr;
 
         int res = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 
                                 NULL,
@@ -43,7 +45,7 @@ class WinSocket : public IServerSocket
                                 0,
                                 NULL);
                       
-        return res != 0;
+        return res != 0 && error != nullptr;
     }
 
     public:
@@ -51,6 +53,7 @@ class WinSocket : public IServerSocket
     WinSocket(const char *port)
     {
         error = nullptr;
+        sockfd = INVALID_SOCKET;
         int iResult = 0;
 
         iResult = WSAStartup(MAKEWORD(2, 2), &wsa_data);
@@ -100,7 +103,7 @@ class WinSocket : public IServerSocket
             {
                 if(fetch_error(WSAGetLastError()))
                 {
-                    std::cerr << "Could not bind to socket with address " << p->ai_addr << '\n' << *error;
+                    std::cerr << "Could not bind to socket with address " << p->ai_addr << '\n' << error.get();
                 }
                 else
                 {
@@ -110,6 +113,7 @@ class WinSocket : public IServerSocket
                 continue;
             }
 
+            this->sockfd = sockfd;
             break;
         }
 
@@ -124,11 +128,26 @@ class WinSocket : public IServerSocket
 
     void open_socket()
     {
-
+        if(listen(sockfd, SOMAXCONN) == SOCKET_ERROR)
+        {
+            if(fetch_error(WSAGetLastError()))
+            {
+                throw std::runtime_error(error.get());
+            }
+            else
+            {
+                throw std::runtime_error("An unknown error occurred while placing the socket in the listening state.");
+            }
+        }
     }
 
     ~WinSocket()
     {
+        if(sockfd != INVALID_SOCKET)
+        {
+            closesocket(sockfd);
+        }
+
         WSACleanup();
     }
 };
