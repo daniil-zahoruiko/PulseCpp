@@ -13,7 +13,9 @@ class WinSocket : public IServerSocket
 {
     private:
 
-    struct errorDeleter
+    WSAData wsa_data;
+
+    struct error_deleter
     {
         void operator()(char *ptr) const 
         {
@@ -24,7 +26,7 @@ class WinSocket : public IServerSocket
         }
     };
 
-    std::unique_ptr<char, errorDeleter> error;
+    std::unique_ptr<char, error_deleter> error;
 
     bool fetch_error(int errorCode)
     {
@@ -48,9 +50,10 @@ class WinSocket : public IServerSocket
 
     WinSocket(const char *port)
     {
-        std::cout << "start\n";
         error = nullptr;
         int iResult = 0;
+
+        iResult = WSAStartup(MAKEWORD(2, 2), &wsa_data);
 
         addrinfo *server_info = NULL, hints;
         memset(&hints, 0, sizeof(hints));
@@ -60,8 +63,6 @@ class WinSocket : public IServerSocket
         hints.ai_flags = AI_PASSIVE;
 
         iResult = getaddrinfo(NULL, port, &hints, &server_info);
-
-        std::cout << iResult << '\n';
 
         if(iResult != 0)
         {
@@ -77,7 +78,7 @@ class WinSocket : public IServerSocket
         }
 
         addrinfo *p = NULL;
-        for(addrinfo *p = server_info; p != NULL; p = p->ai_next)
+        for(p = server_info; p != NULL; p = p->ai_next)
         {
             SOCKET sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
             if(sockfd == INVALID_SOCKET)
@@ -117,7 +118,7 @@ class WinSocket : public IServerSocket
         if(p == NULL)
         {
             WSACleanup();
-            throw std::runtime_error("Could not bind any socket");
+            throw std::runtime_error("Could not bind any socket\n");
         }
     }
 
