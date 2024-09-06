@@ -8,7 +8,7 @@ class IServerSocket
     public:
         virtual ~IServerSocket() {};
 
-        virtual void open_socket() = 0;
+        virtual void wait_for_requests() = 0;
 };
 
 #endif

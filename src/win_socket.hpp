@@ -126,7 +126,7 @@ class WinSocket : public IServerSocket
         }
     }
 
-    void open_socket()
+    void wait_for_requests()
     {
         if(listen(sockfd, SOMAXCONN) == SOCKET_ERROR)
         {
@@ -137,6 +137,18 @@ class WinSocket : public IServerSocket
             else
             {
                 throw std::runtime_error("An unknown error occurred while placing the socket in the listening state.");
+            }
+        }
+
+        SOCKET client_socket = INVALID_SOCKET;
+        sockaddr_storage client_info;
+        while(true)
+        {
+            int client_info_size = sizeof(client_info);
+            client_socket = accept(sockfd, (sockaddr*)&client_info, &client_info_size);
+            if(client_socket != INVALID_SOCKET)
+            {
+                std::cout << "Got connection\n";
             }
         }
     }

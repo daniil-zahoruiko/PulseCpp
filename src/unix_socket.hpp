@@ -13,9 +13,9 @@ class UnixSocket : public IServerSocket
 
     }
 
-    void open_socket()
+    void wait_for_requests()
     {
-        
+
     }
 
     ~UnixSocket()

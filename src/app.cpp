@@ -13,4 +13,6 @@ void App::start(const char *port)
     }
 
     std::cout << "App is running on port " << port << '\n';
+
+    (*socket).wait_for_requests();
 }
