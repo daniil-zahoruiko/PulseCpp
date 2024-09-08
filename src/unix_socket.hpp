@@ -8,9 +8,9 @@
 class UnixSocket : public IServerSocket
 {
     public:
-    UnixSocket(const char *port)
+    UnixSocket(AppContext app_context)
     {
-
+        
     }
 
     void wait_for_requests()

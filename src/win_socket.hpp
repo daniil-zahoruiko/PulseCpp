@@ -13,6 +13,8 @@ class WinSocket : public IServerSocket
 {
     private:
 
+    AppContext app_context;
+
     WSAData wsa_data;
     SOCKET sockfd;
 
@@ -50,8 +52,10 @@ class WinSocket : public IServerSocket
 
     public:
 
-    WinSocket(const char *port)
+    WinSocket(AppContext app_context)
     {
+        this->app_context = app_context;
+
         error = nullptr;
         sockfd = INVALID_SOCKET;
         int iResult = 0;
@@ -65,7 +69,7 @@ class WinSocket : public IServerSocket
         hints.ai_protocol = IPPROTO_TCP;
         hints.ai_flags = AI_PASSIVE;
 
-        iResult = getaddrinfo(NULL, port, &hints, &server_info);
+        iResult = getaddrinfo(NULL, this->app_context.get_port(), &hints, &server_info);
 
         if(iResult != 0)
         {
@@ -146,10 +150,12 @@ class WinSocket : public IServerSocket
         {
             int client_info_size = sizeof(client_info);
             client_socket = accept(sockfd, (sockaddr*)&client_info, &client_info_size);
-            if(client_socket != INVALID_SOCKET)
+            if(client_socket == INVALID_SOCKET)
             {
-                std::cout << "Got connection\n";
+                continue;
             }
+
+            // TODO: handle the incoming request
         }
     }
 

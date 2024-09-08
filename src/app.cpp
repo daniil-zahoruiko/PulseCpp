@@ -4,7 +4,8 @@
 
 void App::start(const char *port)
 {
-    std::unique_ptr<IServerSocket> socket = SocketFactory::create_server_socket(port);
+    AppContext app_context = AppContext(port, endpoint_mapping);
+    std::unique_ptr<IServerSocket> socket = SocketFactory::create_server_socket(app_context);
 
     if(socket == nullptr)
     {
@@ -15,4 +16,14 @@ void App::start(const char *port)
     std::cout << "App is running on port " << port << '\n';
 
     (*socket).wait_for_requests();
+}
+
+void App::register_endpoint(const char *url, const char *method, RequestHandler action_function)
+{
+    if(endpoint_mapping.count(url) == 0)
+    {
+        endpoint_mapping.insert({url, std::unordered_map<const char*, RequestHandler>()});
+    }
+
+    endpoint_mapping[url].insert({method, action_function});
 }
