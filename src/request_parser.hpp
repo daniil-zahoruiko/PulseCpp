@@ -1,6 +1,8 @@
 #ifndef REQUEST_PARSER_HPP
 #define REQUEST_PARSER_HPP
 
+#include <cstring>
+
 #define DEFAULT_BUFFER_LENGTH 512
 
 class RequestParser
@@ -13,8 +15,9 @@ class RequestParser
     char *const socket_buffer;
     const int socket_buffer_length;
 
-    char *request_line_buffer;
-    char *header_buffer;
+    char *request_line_buffer, *header_buffer;
+
+    bool is_request_line_received, is_headers_received;
 
     public:
 
@@ -23,6 +26,8 @@ class RequestParser
     {
         request_line_buffer = new char[MAX_REQUEST_LINE_LEN];
         header_buffer = new char[MAX_HEADER_LEN];
+
+        reset();
     }
 
     void process_next_chunk(int len)
@@ -33,6 +38,15 @@ class RequestParser
     Request build_request()
     {
         
+    }
+
+    void reset()
+    {
+        memset(request_line_buffer, 0, MAX_REQUEST_LINE_LEN);
+        memset(header_buffer, 0, MAX_HEADER_LEN);
+
+        is_request_line_received = false;
+        is_headers_received = false;
     }
 
     ~RequestParser()
