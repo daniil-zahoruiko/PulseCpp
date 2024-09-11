@@ -1,3 +1,6 @@
+#ifndef SOCKET_FACTORY_HPP
+#define SOCKET_FACTORY_HPP
+
 #include "ISocket.hpp"
 #include "app_context.hpp"
 #include "win_socket.hpp"
@@ -27,3 +30,5 @@ class SocketFactory
         
     }
 };
+
+#endif
