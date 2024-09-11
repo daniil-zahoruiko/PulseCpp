@@ -2,6 +2,7 @@
 #define WIN_SOCKET_HPP
 
 #include "ISocket.hpp"
+#include "request_parser.hpp"
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <stdexcpt.h>
@@ -17,6 +18,8 @@ class WinSocket : public IServerSocket
 
     WSAData wsa_data;
     SOCKET sockfd;
+
+    char *buffer;
 
     struct error_deleter
     {
@@ -56,6 +59,7 @@ class WinSocket : public IServerSocket
     {
         this->app_context = app_context;
 
+        buffer = nullptr;
         error = nullptr;
         sockfd = INVALID_SOCKET;
         int iResult = 0;
@@ -146,6 +150,10 @@ class WinSocket : public IServerSocket
 
         SOCKET client_socket = INVALID_SOCKET;
         sockaddr_storage client_info;
+        buffer = new char[DEFAULT_BUFFER_LENGTH];
+
+        RequestParser parser = RequestParser(buffer);
+        int iResult = 0;
         while(true)
         {
             int client_info_size = sizeof(client_info);
@@ -155,7 +163,15 @@ class WinSocket : public IServerSocket
                 continue;
             }
 
-            // TODO: handle the incoming request
+            iResult = 0;
+            do
+            {
+                iResult = recv(client_socket, buffer, DEFAULT_BUFFER_LENGTH, 0);
+                parser.process_next_chunk(iResult);
+            } while(iResult > 0);
+
+            Request request = parser.build_request();
+            Response response = app_context.get_handler(request.url, request.method)(request);
         }
     }
 
@@ -164,6 +180,11 @@ class WinSocket : public IServerSocket
         if(sockfd != INVALID_SOCKET)
         {
             closesocket(sockfd);
+        }
+
+        if(buffer)
+        {
+            delete[] buffer;
         }
 
         WSACleanup();
