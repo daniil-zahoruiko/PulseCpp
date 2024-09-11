@@ -172,6 +172,10 @@ class WinSocket : public IServerSocket
 
             Request request = parser.build_request();
             Response response = app_context.get_handler(request.url, request.method)(request);
+
+            // TODO: send response back to the client
+
+            parser.reset();
         }
     }
 
