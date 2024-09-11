@@ -11,6 +11,7 @@ class RequestParser
     const int MAX_HEADER_LEN = 16384;   // a reasonable limit on header length
 
     char *const socket_buffer;
+    const int socket_buffer_length;
 
     char *request_line_buffer;
     char *header_buffer;
@@ -18,7 +19,7 @@ class RequestParser
     public:
 
 
-    RequestParser(char *&buffer) : socket_buffer(buffer)
+    RequestParser(char *&buffer, int buffer_length) : socket_buffer(buffer), socket_buffer_length(buffer_length)
     {
         request_line_buffer = new char[MAX_REQUEST_LINE_LEN];
         header_buffer = new char[MAX_HEADER_LEN];

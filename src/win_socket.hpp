@@ -152,7 +152,7 @@ class WinSocket : public IServerSocket
         sockaddr_storage client_info;
         buffer = new char[DEFAULT_BUFFER_LENGTH];
 
-        RequestParser parser = RequestParser(buffer);
+        RequestParser parser = RequestParser(buffer, DEFAULT_BUFFER_LENGTH);
         int iResult = 0;
         while(true)
         {
