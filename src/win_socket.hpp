@@ -163,15 +163,21 @@ class WinSocket : public IServerSocket
                 continue;
             }
 
+            std::cout << "Received request, parsing...\n";
+
             iResult = 0;
+            bool parsed = false;
             do
             {
                 iResult = recv(client_socket, buffer, DEFAULT_BUFFER_LENGTH, 0);
-                parser.process_next_chunk(iResult);
-            } while(iResult > 0);
+                std::cout << iResult << '\n';
+                parsed = parser.process_next_chunk(iResult);
+                std::cout << "Processed\n";
+            } while(iResult > 0 && !parsed);
 
+            std::cout << "Done parsing\n";
             Request request = parser.build_request();
-            Response response = app_context.get_handler(request.url, request.method)(request);
+            // Response response = app_context.get_handler(request.url, request.method)(request);
 
             // TODO: send response back to the client
 
