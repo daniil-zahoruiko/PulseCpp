@@ -18,6 +18,7 @@ class RequestParser
     const int MAX_HEADER_LEN = 16384;   // a reasonable limit on header length
 
     const std::string CRLF{ CR_ASCII, LF_ASCII };
+    const std::string CONTENT_LENGTH_HEADER_NAME = "Content-Length: ";
 
     char *const socket_buffer;
     const int socket_buffer_length;
@@ -82,13 +83,13 @@ class RequestParser
                     curr = i + 1;
 
                     std::string header_str = (std::string)header_buffer;
-                    std::size_t content_length_header_pos = header_str.find("Content-Length");
+                    std::size_t content_length_header_pos = header_str.find(CONTENT_LENGTH_HEADER_NAME);
                     if(content_length_header_pos == std::string::npos)
                     {
                         return true;
                     }
 
-                    content_length_expected = std::stoi(header_buffer + content_length_header_pos + 17);
+                    content_length_expected = std::stoi(header_buffer + content_length_header_pos + CONTENT_LENGTH_HEADER_NAME.size());
 
                     content_buffer = new char[content_length_expected];
                 }
@@ -122,6 +123,8 @@ class RequestParser
         std::cout << request_line_buffer << '\n';
         std::cout << header_buffer << '\n';
         std::cout << content_buffer << '\n';
+
+        return Request("", "");
     }
 
     void reset()
