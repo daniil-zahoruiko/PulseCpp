@@ -7,13 +7,13 @@ class AppContext
 
     const char *port;
 
-    std::unordered_map<const char*, std::unordered_map<const char*, RequestHandler>> endpoint_mapping;
+    std::unordered_map<std::string, std::unordered_map<std::string, RequestHandler>> endpoint_mapping;
 
     public:
 
     AppContext() { }
 
-    AppContext(const char *port, std::unordered_map<const char*, std::unordered_map<const char*, RequestHandler>> endpoint_mapping)
+    AppContext(const char *port, std::unordered_map<std::string, std::unordered_map<std::string, RequestHandler>> endpoint_mapping)
     {
         this->port = port;
         this->endpoint_mapping = endpoint_mapping;
@@ -24,19 +24,19 @@ class AppContext
         return port;
     }
 
-    RequestHandler get_handler(const char *url, const char *method)
+    RequestHandler try_get_handler_for_request(Request request)
     {
-        if(endpoint_mapping.count(url) == 0)
+        if(endpoint_mapping.count(request.url) == 0)
         {
             return nullptr;
         }
 
-        if(endpoint_mapping[url].count(method) == 0)
+        if(endpoint_mapping[request.url].count(request.method) == 0)
         {
             return nullptr;
         }
 
-        return endpoint_mapping[url][method];
+        return endpoint_mapping[request.url][request.method];
     }
 };
 

@@ -173,7 +173,7 @@ class WinSocket : public IServerSocket
 
             std::cout << "Done parsing\n";
             Request request = parser.build_request();
-            // Response response = app_context.get_handler(request.url, request.method)(request);
+            Response response = app_context.try_get_handler_for_request(request)(request);
 
             // TODO: send response back to the client
 

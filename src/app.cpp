@@ -18,11 +18,11 @@ void App::start(const char *port)
     (*socket).wait_for_requests();
 }
 
-void App::register_endpoint(const char *url, const char *method, RequestHandler action_function)
+void App::register_endpoint(std::string url, std::string method, RequestHandler action_function)
 {
     if(endpoint_mapping.count(url) == 0)
     {
-        endpoint_mapping.insert({url, std::unordered_map<const char*, RequestHandler>()});
+        endpoint_mapping.insert({url, std::unordered_map<std::string, RequestHandler>()});
     }
 
     endpoint_mapping[url].insert({method, action_function});

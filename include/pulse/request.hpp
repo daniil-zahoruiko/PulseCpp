@@ -1,14 +1,16 @@
 #ifndef REQUEST_HPP
 #define REQUEST_HPP
 
-class Request
+#include <string>
+
+struct Request
 {
-    public:
+    std::string url;
+    std::string method;
 
-    const char *url;
-    const char *method;
+    const char *raw;
 
-    Request(const char *url, const char *method) : url(url), method(method) {}
+    Request(std::string url, std::string method, const char *raw) : url(url), method(method), raw(raw) {}
 };
 
 #endif

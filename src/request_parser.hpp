@@ -120,11 +120,16 @@ class RequestParser
 
     Request build_request()
     {
-        std::cout << request_line_buffer << '\n';
-        std::cout << header_buffer << '\n';
-        std::cout << content_buffer << '\n';
+        std::string request_line_str = (std::string)request_line_buffer;
 
-        return Request("", "");
+        int sp1 = request_line_str.find_first_of(' ');
+        int sp2 = request_line_str.find_first_of(' ', sp1 + 1);
+
+        std::string method = request_line_str.substr(0, sp1);
+        std::string url = request_line_str.substr(sp1 + 1, sp2 - sp1 - 1);
+        std::string version = request_line_str.substr(sp2 + 1);
+
+        return Request(url, method, content_buffer);
     }
 
     void reset()
