@@ -1,7 +1,7 @@
 #ifndef SOCKET_FACTORY_HPP
 #define SOCKET_FACTORY_HPP
 
-#include "ISocket.hpp"
+#include "IServerSocket.hpp"
 #include "app_context.hpp"
 #include "win_socket.hpp"
 #include "unix_socket.hpp"

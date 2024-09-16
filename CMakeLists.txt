@@ -8,6 +8,7 @@ add_library(${PROJECT_NAME} STATIC)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/app.cpp
+        src/response.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

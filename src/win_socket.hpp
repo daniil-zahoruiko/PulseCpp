@@ -1,7 +1,7 @@
 #ifndef WIN_SOCKET_HPP
 #define WIN_SOCKET_HPP
 
-#include "ISocket.hpp"
+#include "IServerSocket.hpp"
 #include "request_parser.hpp"
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -175,10 +175,18 @@ class WinSocket : public IServerSocket
             Request request = parser.build_request();
             Response response = app_context.try_get_handler_for_request(request)(request);
 
-            // TODO: send response back to the client
-
+            int response_length = 0;
+            const char *raw_response = response.build_response(response_length);
+            int bytes_sent = 0;
+            while(bytes_sent < response_length)
+            {
+                send(client_socket, raw_response + bytes_sent, std::min(response_length - bytes_sent, DEFAULT_BUFFER_LENGTH), 0);
+                bytes_sent += std::min(response_length - bytes_sent, DEFAULT_BUFFER_LENGTH);
+            }
+            
+            closesocket(client_socket);
+            delete[] raw_response;
             parser.reset();
-            std::cout << "Reset\n";
         }
     }
 

@@ -1,14 +1,10 @@
 #ifndef REQUEST_PARSER_HPP
 #define REQUEST_PARSER_HPP
 
+#include "definitions.hpp"
 #include <cstring>
 #include <string>
 #include <iostream>
-
-#define DEFAULT_BUFFER_LENGTH 512
-#define CR_ASCII 13
-#define LF_ASCII 10
-#define SP_ASCII 32
 
 class RequestParser
 {
@@ -17,7 +13,6 @@ class RequestParser
     const int MAX_REQUEST_LINE_LEN = 8192;  // recommended by HTTP 1.1 spec
     const int MAX_HEADER_LEN = 16384;   // a reasonable limit on header length
 
-    const std::string CRLF{ CR_ASCII, LF_ASCII };
     const std::string CONTENT_LENGTH_HEADER_NAME = "Content-Length: ";
 
     char *const socket_buffer;

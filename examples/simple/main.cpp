@@ -4,7 +4,7 @@
 Response test_endpoint(Request r)
 {
     std::cout << "User Endpoint\n";
-    return Response();
+    return Response(200, "Test response");
 }
 
 int main()
