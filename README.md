@@ -8,6 +8,7 @@ PulseCpp
 
 In order to be able to use this library, you will need the following:
 - CMake 3.5 or newer
+- C++11 compiler or newer
 
 ## Documentation
 
