@@ -1,5 +1,11 @@
 # PulseCpp
 
+<p>
+  <img src="https://img.shields.io/badge/License-MIT-red?style=flat-square"/>
+  <img src="https://img.shields.io/badge/Made_with-C++-blue?style=flat-square"/>
+  <img src="https://img.shields.io/badge/Protocol-HTTP_1.1-blue?style=flat-square"/>
+</p>
+
 ## Description
 PulseCpp is a web framework for C++. It allows you to create simple API endpoints and run your own server while leveraging the high performance of C++.
 
