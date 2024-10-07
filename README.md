@@ -3,7 +3,7 @@
 <p>
   <img src="https://img.shields.io/badge/License-MIT-red?style=flat-square"/>
   <img src="https://img.shields.io/badge/Made_with-C++-blue?style=flat-square"/>
-  <img src="https://img.shields.io/badge/Protocol-HTTP_1.1-blue?style=flat-square"/>
+  <img src="https://img.shields.io/badge/Protocol-HTTP_1.1-yellow?style=flat-square"/>
 </p>
 
 ## Description
