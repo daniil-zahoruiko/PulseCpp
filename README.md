@@ -1,16 +1,13 @@
 # PulseCpp
 
-PulseCpp
-
 ## Description
+PulseCpp is a web framework for C++. It allows you to create simple API endpoints and run your own server while leveraging the high performance of C++.
 
 ## Requirements
 
 In order to be able to use this library, you will need the following:
 - CMake 3.5 or newer
 - C++11 compiler or newer
-
-## Documentation
 
 ## Usage
 
